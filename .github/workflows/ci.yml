@@ -82,7 +82,7 @@ jobs:
         # pull both images and check if hash is same
         run: |
           docker pull quay.io/openebs/linux-utils:ci
-          docker pull ${{ secrets.DOCKERHUB_ACCOUNT }}/linux-utils:${{ env.TAG }}
+          docker pull docker.io/${{ secrets.DOCKERHUB_ACCOUNT }}/linux-utils:${{ env.TAG }}
           HASH1=$(docker images -q quay.io/openebs/linux-utils:ci)
           HASH2=$(docker images -q ${{ secrets.DOCKERHUB_ACCOUNT }}/linux-utils:${{ env.TAG }})
           test $HASH1 = $HASH2
