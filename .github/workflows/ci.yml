@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Test retag and pushing image
-        uses: akhilerm/tag-push-action@${{ github.ref }}
+        uses: akhilerm/tag-push-action@main
         with:
           src: docker.io/openebs/linux-utils:ci
           dst: |
@@ -72,7 +72,7 @@ jobs:
           password: ${{ secrets.QUAY_TOKEN }}
 
       - name: Test retag and pushing image
-        uses: akhilerm/tag-push-action@${{ github.ref }}
+        uses: akhilerm/tag-push-action@main
         with:
           src: quay.io/openebs/linux-utils:ci
           dst: |
