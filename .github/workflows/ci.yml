@@ -2,9 +2,6 @@ name: Tests
 
 on: ['push']
 
-env:
-  QUAY_REGISTRY: 'quay.io'
-
 jobs:
   test1:
     name: Test push from docker hub to quay
@@ -22,7 +19,7 @@ jobs:
       - name: Login Quay
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.QUAY_REGISTRY }}
+          registry: 'quay.io'
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_TOKEN }}
 
@@ -37,15 +34,15 @@ jobs:
         with:
           src: docker.io/openebs/linux-utils:ci
           dst: |
-            quay.io/akhilerm/linux-utils:${{ env.TAG }}
+            quay.io/${{ secrets.QUAY_ACCOUNT }}/linux-utils:${{ env.TAG }}
 
       - name: Verify pushed image
         # pull both images and check if hash is same
         run: |
           docker pull openebs/linux-utils:ci
-          docker pull quay.io/akhilerm/linux-utils:${{ env.TAG }}
+          docker pull quay.io/${{ secrets.QUAY_ACCOUNT }}/linux-utils:${{ env.TAG }}
           HASH1=$(docker images -q openebs/linux-utils:ci)
-          HASH2=$(docker images -q quay.io/akhilerm/linux-utils:${{ env.TAG }})
+          HASH2=$(docker images -q quay.io/${{ secrets.QUAY_ACCOUNT }}/linux-utils:${{ env.TAG }})
           test $HASH1 = $HASH2
 
   test2:
@@ -79,15 +76,15 @@ jobs:
         with:
           src: quay.io/openebs/linux-utils:ci
           dst: |
-            docker.io/akhilerm/linux-utils:${{ env.TAG }}
+            docker.io/${{ secrets.DOCKERHUB_ACCOUNT }}/linux-utils:${{ env.TAG }}
 
       - name: Verify pushed image
         # pull both images and check if hash is same
         run: |
           docker pull quay.io/openebs/linux-utils:ci
-          docker pull akhilerm/linux-utils:${{ env.TAG }}
+          docker pull ${{ secrets.DOCKERHUB_ACCOUNT }}/linux-utils:${{ env.TAG }}
           HASH1=$(docker images -q quay.io/openebs/linux-utils:ci)
-          HASH2=$(docker images -q akhilerm/linux-utils:${{ env.TAG }})
+          HASH2=$(docker images -q ${{ secrets.DOCKERHUB_ACCOUNT }}/linux-utils:${{ env.TAG }})
           test $HASH1 = $HASH2
 
   test3:
